@@ -33,6 +33,22 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "Sec-Grid-5",
+              "value": "sec-grid-5"
+            },
+            {
+              "name": "Sec-Grid-2",
+              "value": "sec-grid-2"
+            },
+            {
+              "name": "No-Margin",
+              "value": "no-margin"
+            },
+            {
+              "name": "Background Blue",
+              "value": "bg-primary"
             }
           ]
         }
@@ -50,7 +66,37 @@
         "hero",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "businesses-section",
+        "hero-banner",
+        "article-header",
+        "article-body",
+        "inner-banner",
+        "listed-companies",
+        "cookie-consent",
+        "privacy-request",
+        "news-updates",
+        "success-stories",
+        "careers-highlight",
+        "content-listing",
+        "aviation-infrastructure",
+        "key-highlightss",
+        "awards-recognitions",
+        "global-leaders-aviation",
+        "gmr-buisness-expertise",
+        "gmr-buisness-brand",
+        "aviation-services-header",
+        "our-airports",
+        "all-business-cards",
+        "global-airport-network",
+        "social-connect",
+        "image-title-desc-button",
+        "overlay-banner",
+        "header-utility",
+        "common-cards",
+        "listing-filter",
+        "values-and-beliefs",
+        "our-presence"
       ]
     }
   ]

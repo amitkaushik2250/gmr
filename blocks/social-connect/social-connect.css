@@ -1,0 +1,33 @@
+.social-connect-icons .icon {
+    background-color: #f6f6f6;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 1rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    display: inline-flex;
+    border: solid 2px transparent;
+    transition-duration: 0.3s;
+}
+.social-connect-icons .icon:hover {
+    border-color: var(--lorange);
+}
+
+.icon-instagram {
+    background-image: url(../../icons/instagram-icon.svg);
+}
+.icon-x {
+    background-image: url(../../icons/x-icon.svg);
+}
+.icon-linkedin {
+    background-image: url(../../icons/in-icon.svg);
+}
+.icon-x {
+    background-image: url(../../icons/x-icon.svg);
+}
+.icon-youtube {
+    background-image: url(../../icons/ytube-icon.svg);
+}
+.icon-facebook {
+    background-image: url(../../icons/fb-icon.svg);
+}

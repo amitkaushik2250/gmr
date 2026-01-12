@@ -1,0 +1,84 @@
+.gal-investor-wrapper {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  padding: 80px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gal-left h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.gal-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 32px;
+}
+
+.gal-market {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+}
+
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #666;
+}
+
+.market-body {
+  font-size: 15px;
+}
+
+.gal-cta {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #ffc15a;
+  color: #000;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.gal-right {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.gal-stat-card {
+  background: linear-gradient(135deg, #1c6fd5, #0bb3c6);
+  color: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.gal-stat-card img {
+  margin-left: -125px;
+  height: 60px;
+  width: 70px;
+  margin-top: -18px;
+}
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  .gal-investor-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .gal-right {
+    grid-template-columns: 1fr;
+  }
+}

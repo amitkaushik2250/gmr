@@ -10,7 +10,13 @@ import {
   loadSection,
   loadSections,
   loadCSS,
-} from './aem.js';
+} from "./aem.js";
+// Add these lines after existing imports from "./aem.js"
+const getMetadata = (name) => {
+  const meta = document.querySelector(`meta[name="${name}"]`);
+  return meta ? meta.content : null;
+};
+
 
 /**
  * Moves all the attributes from a given elmenet to another given element.
@@ -42,7 +48,10 @@ export function moveInstrumentation(from, to) {
     to,
     [...from.attributes]
       .map(({ nodeName }) => nodeName)
-      .filter((attr) => attr.startsWith('data-aue-') || attr.startsWith('data-richtext-')),
+      .filter(
+        (attr) =>
+          attr.startsWith("data-aue-") || attr.startsWith("data-richtext-")
+      )
   );
 }
 
@@ -52,7 +61,8 @@ export function moveInstrumentation(from, to) {
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
-    if (!window.location.hostname.includes('localhost')) sessionStorage.setItem('fonts-loaded', 'true');
+    if (!window.location.hostname.includes("localhost"))
+      sessionStorage.setItem("fonts-loaded", "true");
   } catch (e) {
     // do nothing
   }
@@ -67,7 +77,7 @@ function buildAutoBlocks() {
     // TODO: add auto block, if needed
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Auto Blocking failed', error);
+    console.error("Auto Blocking failed", error);
   }
 }
 
@@ -85,23 +95,55 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-/**
- * Loads everything needed to get to LCP.
- * @param {Element} doc The container element
- */
+// /**
+//  * Loads everything needed to get to LCP.
+//  * @param {Element} doc The container element
+//  */
+// async function loadEager(doc) {
+//   document.documentElement.lang = "en";
+//   decorateTemplateAndTheme();
+//   const main = doc.querySelector("main");
+//   if (main) {
+//     decorateMain(main);
+//     document.body.classList.add("appear");
+//     await loadSection(main.querySelector(".section"), waitForFirstImage);
+//   }
+
+//   try {
+//     /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
+//     if (window.innerWidth >= 900 || sessionStorage.getItem("fonts-loaded")) {
+//       loadFonts();
+//     }
+//   } catch (e) {
+//     // do nothing
+//   }
+// }
+
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  document.documentElement.lang = "en";
   decorateTemplateAndTheme();
-  const main = doc.querySelector('main');
+  const main = doc.querySelector("main");
   if (main) {
     decorateMain(main);
-    document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    document.body.classList.add("appear");
+    
+    // ???? Wait for Target propositions if enabled (before LCP section)
+    if (getMetadata('target') === 'true') {
+      await new Promise(resolve => {
+        if (window.alloy) return resolve();
+        const checkAlloy = () => {
+          if (window.alloy) resolve();
+          else setTimeout(checkAlloy, 50);
+        };
+        checkAlloy();
+      });
+    }
+    
+    await loadSection(main.querySelector(".section"), waitForFirstImage);
   }
 
   try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
+    if (window.innerWidth >= 900 || sessionStorage.getItem("fonts-loaded")) {
       loadFonts();
     }
   } catch (e) {
@@ -114,15 +156,15 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
-  const main = doc.querySelector('main');
+  const main = doc.querySelector("main");
   await loadSections(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  loadHeader(doc.querySelector("header"));
+  loadFooter(doc.querySelector("footer"));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
@@ -133,10 +175,147 @@ async function loadLazy(doc) {
  * without impacting the user experience.
  */
 function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
-  window.setTimeout(() => import('./delayed.js'), 3000);
-  // load anything that can be postponed to the latest here
+  // window.setTimeout(() => {
+  // ✅ Step 2: container add karo (where plugin should appear)
+  addBhashiniContainer();
+
+  // ✅ Step 1: script add karo (bottom of body)
+  loadBhashiniScript();
+
+  // existing delayed logic
+  import("./delayed.js");
+  // }, 300);
 }
+// ???? ADOBE TARGET INTEGRATION (using existing window.alloy)
+const onDecoratedElement = (fn) => {
+  if (document.querySelector('[data-block-status="loaded"],[data-section-status="loaded"]')) {
+    fn();
+    return;
+  }
+  const observer = new MutationObserver((mutations) => {
+    if (mutations.some((m) => m.target.tagName === 'BODY' || 
+      m.target.dataset?.sectionStatus === 'loaded' || 
+      m.target.dataset?.blockStatus === 'loaded')) {
+      fn();
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.querySelector('main'), { 
+    subtree: true, 
+    attributes: true, 
+    attributeFilter: ['data-block-status', 'data-section-status'] 
+  });
+  observer.observe(document.body, { childList: true });
+};
+
+const getAndApplyTargetPropositions = async () => {
+  if (!window.alloy) {
+    console.warn('? window.alloy not available');
+    return;
+  }
+  
+  try {
+    console.log('???? Fetching Target propositions...');
+    
+    // MARK RETURNING USER IN PROFILE
+    const isReturning = window.isReturningUser || localStorage.getItem('returning-user');
+    
+    const response = await window.alloy('sendEvent', { 
+      renderDecisions: false,
+      decisionScopes: ['__view__'],
+      xdm: {
+        eventType: 'web.webpagedetails.pageViews',
+        profile: {
+          isReturningUser: !!isReturning  // true/false for Target
+        }
+      }
+    });
+    
+    const { propositions } = response;
+    console.log('???? Propositions:', propositions?.length || 0);
+    
+    onDecoratedElement(async () => {
+      await window.alloy('applyPropositions', { propositions });
+      console.log('? Target applied!');
+      
+      setTimeout(() => {
+        window.alloy('sendEvent', {
+          xdm: { 
+            eventType: 'decisioning.propositionDisplay',
+            profile: { isReturningUser: !!isReturning },
+            _experience: { decisioning: { propositions } }
+          }
+        });
+        console.log('???? Display events + returning user sent');
+      }, 1000);
+    });
+  } catch (error) {
+    console.error('? Target error:', error);
+  }
+};
+
+
+// Auto-trigger Target if metadata present
+if (getMetadata('target') === 'true' || getMetadata('personalization')) {
+  getAndApplyTargetPropositions();
+}
+
+
+function loadBhashiniScript() {
+  // prevent multiple load
+  if (document.getElementById("bhashini-script")) return;
+
+  const script = document.createElement("script");
+  script.id = "bhashini-script";
+  script.src =
+    "https://translation-plugin.bhashini.co.in/v3/website_translation_utility.js";
+  script.defer = true;
+
+  document.body.appendChild(script);
+}
+function addBhashiniContainer() {
+  if (document.querySelector(".bhashini-plugin-container")) return;
+
+  const container = document.createElement("div");
+  container.className = "bhashini-plugin-container";
+
+  // Add inside header
+  const header = document.querySelector("header");
+
+  if (header) {
+    // header ke end me add hoga
+    header.appendChild(container);
+  } else {
+    // fallback (agar header abhi load nahi hua)
+    document.body.prepend(container);
+  }
+}
+
+const KEY = 'returning-user';
+if (!localStorage.getItem(KEY)) {
+  localStorage.setItem(KEY, 'true');
+}
+else {
+  window.isReturningUser = true;
+}
+
+// function addBhashiniContainer() {
+//   // prevent duplicate
+//   if (document.querySelector(".bhashini-plugin-container")) return;
+
+//   const container = document.createElement("div");
+//   container.className = "bhashini-plugin-container";
+
+//   // 🔥 target: header > .default-content-wrapper
+//   const headerWrapper = document.querySelector(".primary-header");
+
+//   if (headerWrapper) {
+//     headerWrapper.appendChild(container);
+//   } else {
+//     // fallback (in case header not yet rendered)
+//     document.body.prepend(container);
+//   }
+// }
 
 async function loadPage() {
   await loadEager(document);

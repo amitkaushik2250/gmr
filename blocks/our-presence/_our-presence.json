@@ -1,0 +1,164 @@
+{
+  "definitions": [
+    {
+      "title": "Our Presence",
+      "id": "our-presence",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "our-presence",
+              "model": "our-presence",
+              "filter": "our-presence-filter"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Presence Group",
+      "id": "presence-group",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "presence-group",
+              "model": "presence-group"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Presence Location",
+      "id": "presence-location",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "presence-location",
+              "model": "presence-location"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "our-presence",
+      "fields": [
+        {
+          "component": "text",
+          "name": "sectionHeading",
+          "label": "Section Heading",
+          "valueType": "string",
+          "defaultValue": "Our Presence"
+        },
+        {
+          "component": "reference",
+          "name": "mapBackgroundImageDesktop",
+          "label": "Map Background Image (Desktop)",
+          "valueType": "string"
+        },
+        {
+          "component": "reference",
+          "name": "mapBackgroundImageMobile",
+          "label": "Map Background Image (Mobile)",
+          "valueType": "string"
+        }
+      ]
+    },
+    {
+      "id": "presence-group",
+      "itemLabel": "groupName",
+      "fields": [
+        {
+          "component": "text",
+          "name": "region",
+          "label": "Region (india / international)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "groupId",
+          "label": "Group ID (e.g. india)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "groupName",
+          "label": "Group Name (UI Label)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "isDefault",
+          "label": "Default Selected (yes / no)",
+          "valueType": "string",
+          "defaultValue": "no"
+        }
+      ]
+    },
+    {
+      "id": "presence-location",
+      "itemLabel": "locationName",
+      "fields": [
+        {
+          "component": "text",
+          "name": "region",
+          "label": "Region (india / international)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "groupId",
+          "label": "Group ID (must match Presence Group)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "locationName",
+          "label": "Location Name",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "subtext",
+          "label": "Subtext (Yellow Label)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "topPos",
+          "label": "Top Position (%)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "leftPos",
+          "label": "Left Position (%)",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "link",
+          "label": "External Link URL",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "our-presence-filter",
+      "components": [
+        "presence-group",
+        "presence-location"
+      ]
+    }
+  ]
+}
