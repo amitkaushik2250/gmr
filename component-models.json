@@ -820,6 +820,67 @@
     ]
   },
   {
+    "id": "corporate-governance",
+    "fields": [
+      {
+        "component": "text",
+        "name": "mainTitle",
+        "label": "Main Heading"
+      },
+      {
+        "component": "richtext",
+        "name": "introText",
+        "label": "Intro Paragraphs"
+      },
+      {
+        "component": "text",
+        "name": "sectionSubtitle",
+        "label": "Section Subtitle (e.g. Building Blocks)"
+      }
+    ]
+  },
+  {
+    "id": "governance-section",
+    "itemLabel": "categoryTitle",
+    "fields": [
+      {
+        "component": "text",
+        "name": "categoryTitle",
+        "label": "Category Title (Technology/People/Process)"
+      },
+      {
+        "component": "select",
+        "name": "colorTheme",
+        "label": "Section Color",
+        "options": [
+          {
+            "name": "Red",
+            "value": "red"
+          },
+          {
+            "name": "Yellow",
+            "value": "yellow"
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "governance-list-item",
+    "itemLabel": "pointText",
+    "fields": [
+      {
+        "component": "text",
+        "name": "pointText",
+        "label": "Bullet Point Text"
+      }
+    ]
+  },
+  {
     "id": "factsheet",
     "fields": [
       {
@@ -1579,6 +1640,32 @@
         "component": "aem-content",
         "name": "watch-video-link",
         "label": "Watch Video Link URL",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
         "valueType": "string"
       }
     ]
