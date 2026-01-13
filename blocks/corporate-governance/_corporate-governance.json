@@ -52,8 +52,7 @@
     {
       "id": "corporate-governance",
       "fields": [
-        { "component": "text", "name": "mainTitle", "label": "Main Heading" },
-        { "component": "richtext", "name": "introText", "label": "Intro Paragraphs" },
+        { "component": "richtext", "name": "introMainText", "label": "Intro Paragraphs" },
         { "component": "text", "name": "sectionSubtitle", "label": "Section Subtitle (e.g. Building Blocks)" }
       ]
     },

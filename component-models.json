@@ -823,13 +823,8 @@
     "id": "corporate-governance",
     "fields": [
       {
-        "component": "text",
-        "name": "mainTitle",
-        "label": "Main Heading"
-      },
-      {
         "component": "richtext",
-        "name": "introText",
+        "name": "introMainText",
         "label": "Intro Paragraphs"
       },
       {
