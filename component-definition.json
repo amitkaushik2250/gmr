@@ -471,6 +471,9 @@
         {
           "title": "Corporate Governance",
           "id": "corporate-governance",
+          "groups": [
+            "governance-section"
+          ],
           "plugins": {
             "xwalk": {
               "page": {
@@ -487,6 +490,9 @@
         {
           "title": "Governance Section",
           "id": "governance-section",
+          "groups": [
+            "governance-list-item"
+          ],
           "plugins": {
             "xwalk": {
               "page": {

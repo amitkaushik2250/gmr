@@ -841,7 +841,7 @@
       {
         "component": "text",
         "name": "categoryTitle",
-        "label": "Category Title (Technology/People/Process)"
+        "label": "Category Title (Technology / People / Process)"
       },
       {
         "component": "select",
